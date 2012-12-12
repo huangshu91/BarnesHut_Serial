@@ -5,7 +5,9 @@
  *      Author: Maiev
  */
 #include "Body.h"
+#include <iostream>
 #include "Config.h"
+using namespace std;
 
 int Body::NUMP = 0;
 
@@ -38,6 +40,14 @@ void Body::Initialize(int x, int y, int xv, int yv, int xa, int ya, int m) {
 }
 
 void Body::Update() {
+  /*
+  if (myId == 31) {
+    cout << "body update 31" << endl;
+    cout << xAcc << " " << yAcc << endl;
+    cout << xVel << " " << yVel << endl;
+    cout << xPos << " " << yPos << endl;
+  }
+  */
   xVel += xAcc;
   yVel += yAcc;
   xPos += xVel;
@@ -48,6 +58,8 @@ void Body::Update() {
 }
 
 void Body::Render() {
+  //if (myId == 32)
+  //std::cout << xPos << " " << yPos << std::endl;
   parent->AddDraw(sprite);
 }
 

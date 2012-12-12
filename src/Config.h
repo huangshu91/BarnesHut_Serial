@@ -19,4 +19,8 @@ const bool DEBUG = true;
 
 const float THETA = 0.1;
 
+const int NUM_STAR = 1000;
+
+const int MAX_LEVEL = 10;
+
 #endif /* CONFIG_H_ */

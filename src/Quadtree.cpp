@@ -9,6 +9,7 @@
 #include "Config.h"
 #include "math.h"
 #include <iostream>
+using namespace std;
 
 Quadtree::Quadtree(int lev) {
   levels = lev;
@@ -36,6 +37,8 @@ void Quadtree::Insert(Body* obj) {
   mass += obj->mass;
   xcom = tempx/mass;
   ycom = tempy/mass;
+
+  if (levels >= MAX_LEVEL) { objects.push_back(obj); size++; return; }
 
   if (objects.size() < MAX_OBJECTS && isleaf == true) {
     objects.push_back(obj);
@@ -76,7 +79,6 @@ int Quadtree::GetIndex(Body* obj) {
   return index;
 }
 
-//untested but should be fine
 void Quadtree::Clear() {
   mass = 0;
   xcom = 0;
@@ -117,10 +119,15 @@ void Quadtree::Split() {
 }
 
 void Quadtree::Calculate(Body* obj) {
+  //std::cout << "test " << obj->Getid() << std::endl;
+  if (xcom == 0 && ycom == 0 && mass == 0) return; //empty space
 
   float dx = xcom-obj->xPos;
   float dy = ycom-obj->yPos;
+  //std::cout << obj->xPos << " " << obj->yPos << std::endl;
   float D = sqrt((dx*dx)+(dy*dy));
+  //std::cout << "test3" << std::endl;
+  //DebugPrint();
   if (D == 0) return; // same object since distance = 0
   float thet = w/D; // ratio of bound box and distance between CoM
 

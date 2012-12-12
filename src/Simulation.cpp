@@ -32,7 +32,7 @@ void Simulation::Setup() {
 
   Body* tempobj;
 
-  for (int i = 0; i < 9; i++) {
+  for (int i = 0; i < NUM_STAR; i++) {
     tempobj = new Body(this);
     entities.push_back(tempobj);
   }
@@ -48,7 +48,7 @@ void Simulation::Setup() {
   entities[6]->xPos = midx + 142.4;  entities[6]->mass = 0.00568; //saturn
   entities[7]->xPos = midx + 287.2;  entities[7]->mass = 0.000866; //uranus
   entities[8]->xPos = midx + 449.9;  entities[8]->mass = 0.00103; //neptune
-
+/*
   for (int i = 1; i < NUMP; i++) {
     entities[i]->xVel = 0;
     entities[i]->yPos = midy;
@@ -57,23 +57,46 @@ void Simulation::Setup() {
       entities[i]->yVel *= -1;
     }
   }
+*/
 
 
-  /*
   std::srand(9);
+
+  // for sufficiently large numbers of NUMP, xpos and ypos collisions will happen which
+  // not only cause distance to be a problem but insertion will cause crash.  need to figure
+  // out a good distribution
 
   for (int i = 1; i < NUMP; i++) {
     entities[i]->xVel = 0;
     entities[i]->yPos = std::rand() % 1000 + 10;
     entities[i]->xPos = std::rand() % 1000 + 10;
-    entities[i]->mass = (std::rand() % 100 + 1) / 10000;
+    if (entities[i]->xPos == 512) entities[i]->xPos += 5;
+    entities[i]->mass = ((float)(std::rand() % 100 + 1)) / 10000;
     entities[i]->yVel = sqrt(G * 19.89 / fabs(entities[i]->xPos - midx));
     if (entities[i]->xPos > midx) {
       entities[i]->yVel *= -1;
     }
   }
 
+
+  /*
+  int startx = 100;
+  int starty = 100;
+  for (int i = 0; i < NUMP; i++) {
+    entities[i]->xVel = 0;
+    entities[i]->xPos = startx;
+    startx += 10;
+    if (startx > WINDOW_WIDTH-100) { startx = 100; starty+= 10; }
+    entities[i]->yPos = starty;
+    entities[i]->mass = ((float)(std::rand() % 100 + 1)) / 10000;
+    entities[i]->yVel = sqrt(G * 19.89 / fabs(entities[i]->xPos - midx));
+    if (entities[i]->xPos > midx) {
+      entities[i]->yVel *= -1;
+    }
+  }
   */
+
+  //std::cout << entities[31]->xPos << " " << entities[31]->yPos << " " << entities[31]->mass << std::endl;
 
   world = new Quadtree(0);
   world->SetParent(NULL);
@@ -150,12 +173,13 @@ void Simulation::Run() {
       entities[i]->Render();
       world->Insert(entities[i]);
       world->Calculate(entities[i]);
-    }
 
-    world->Render(this);
+      //std::cout << "test3" << std::endl;
+
+    }
+    //world->Render(this);
     DebugRender();
     gameWindow.Display();
-
   }
 
 }
